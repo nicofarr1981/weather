@@ -35,6 +35,36 @@ weather_data = JSON.parse(response)
 # 1. inspect the weather_data hash
 #puts weather_data
 
+#puts "In #{weather_data["region"]} it is currently #{weather_data["currentConditions"]["temp"]["c"]} degrees C and #{weather_data["currentConditions"]["comment"]}"
+#puts "The rest of today will be a high of #{weather_data["next_days"][0]["max_temp"]["c"]} C and #{weather_data["next_days"][0]["comment"]}"
+#puts "The upcomming weather forecast is:"
+#counter = 0
+#for day in weather_data["next_days"]
+#    if counter != 0
+#        puts "#{day["day"]}: A high of #{day["max_temp"]["c"]} C and #{day["comment"]}"
+#    end
+#    counter = counter+1
+#end
+
+# CHALLENGE
+# Can you display the weather forecast summary for a user-entered city?
+# Use the following code at the very top of the file and then replace "chicago" in the api url with the user-entered city:
+# puts "What city are you in?"
+# city = gets.chomp
+# puts city
+# Note: what happens if the user-entered value is not a known city? You'll want to do some error handling.
+
+weather_data = {}
+
+while (weather_data["status"] == "fail" || weather_data == {}) do
+    puts "What city are you in?"
+    city = gets.chomp
+    url = "https://weatherdbi.herokuapp.com/data/weather/#{city}"
+    uri = URI(url)
+    response = Net::HTTP.get(uri)
+    weather_data = JSON.parse(response)
+end
+
 puts "In #{weather_data["region"]} it is currently #{weather_data["currentConditions"]["temp"]["c"]} degrees C and #{weather_data["currentConditions"]["comment"]}"
 puts "The rest of today will be a high of #{weather_data["next_days"][0]["max_temp"]["c"]} C and #{weather_data["next_days"][0]["comment"]}"
 puts "The upcomming weather forecast is:"
@@ -45,11 +75,3 @@ for day in weather_data["next_days"]
     end
     counter = counter+1
 end
-
-# CHALLENGE
-# Can you display the weather forecast summary for a user-entered city?
-# Use the following code at the very top of the file and then replace "chicago" in the api url with the user-entered city:
-# puts "What city are you in?"
-# city = gets.chomp
-# puts city
-# Note: what happens if the user-entered value is not a known city? You'll want to do some error handling.
